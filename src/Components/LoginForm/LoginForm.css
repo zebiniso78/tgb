@@ -1,0 +1,134 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.login__form {
+    position: relative;
+    width: 35%;
+    margin: 0 auto;
+    margin-top: 60px;
+    margin-bottom: 20px;
+    padding: 100px 60px;
+    padding-bottom: 60px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px 0.5px rgba(16, 120, 98, 0.6);
+}
+
+.user-wrapper {
+    position: absolute;
+    left: 50%;
+    bottom:100%;
+    transform: translate(-50%, 50%);
+    background-color: #fff;
+    box-shadow: 0px 0px 8px 0.5px rgba(16, 120, 98, 0.6);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.user__img {
+    width: 120px;
+    height: 120px;
+}
+
+.login__title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.login__title {
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    font-weight: bold;
+    font-size: 48px;
+    color: #03483A;
+}
+
+.login__select-language {
+    background-color: none;
+    border: none;
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    font-weight: bold;
+    font-size: 18px;
+    color: #03483A; 
+}
+
+.email-wrapper {
+    margin-bottom: 24px;
+}
+
+.password-wrapper {
+    margin-bottom: 12px;
+}
+
+.username__label, .password__label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(17, 17, 17); 
+}
+
+.username, .password {
+    border: none;
+    border-radius: 8px;
+    padding:12px 8px;
+    width: 100%;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    color:rgba(1, 1, 1, 0.5);
+    box-shadow: 0px 0px 8px 0.5px rgba(16, 120, 98, 0.6); 
+}
+
+.show-password__form {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.show-password__input {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #107862;
+    margin-right: 12px;
+}
+
+.show-password__label {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    color: #111;
+}
+
+.login__button {
+ width: 50%;
+ display: block;
+ margin: 0 auto;
+ padding: 14px 60px;
+ border-radius: 8px;
+ border: 1px solid #107862;
+ background-color: #107862;
+ color: #fff;
+ font-size: 24px;
+ font-weight: bold;;
+ font-family: 'Roboto', sans-serif;
+}
+
+.login__button:hover {
+    opacity: 90%;
+}
+
+.login__button:active {
+    opacity: 70%;
+}
+
+
+
+
+
