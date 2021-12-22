@@ -1,20 +1,23 @@
 import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-
-import AuthenticatedApp from './AuthenticatedApp';
-import UnauthenticatedApp from './UnauthenticatedApp';
-
-import useToken from './Hooks/useToken';
-
+//import 'bootstrap/dist/css/bootstrap.min.css';
+import Main from './Pages/Main/Main';
+import Login from './Pages/LogIn/Login';
+import Complaints from './Components/Complaints/Complaints';
 
 function App() {
-
-  const [token] =useToken();
-  if (token) {
-		return <AuthenticatedApp />;
-	} else {
-		return <UnauthenticatedApp />;
-	}
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/main" element={<Main />} />
+          <Route path="/complaints/:id" element={<Complaints />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
 }
 
 export default App;

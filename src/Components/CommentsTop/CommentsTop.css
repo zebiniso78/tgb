@@ -1,0 +1,21 @@
+.comments__navbar {
+  margin-top: 10px;
+}
+
+.logo__image-comment {
+  display: block;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+.logo__info-comment {
+  display: block;
+  font-size: 32px;
+  font-family: 'Roboto', sans-serif;
+  color: #03483a;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
