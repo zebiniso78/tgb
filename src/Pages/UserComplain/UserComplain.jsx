@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Main.css';
+import './UserComplain.css';
 import CommentsTop from '../../Components/CommentsTop/CommentsTop';
-import CommentsFilter from '../../Components/CommentsFilter/CommentsFilter';
+import Complain from '../../Components/Complain/Complain';
 
-const Main = () => {
+const UserComplain = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!localStorage.getItem('token')) {
@@ -13,9 +13,10 @@ const Main = () => {
   }, []);
   return (
     <>
-      <CommentsFilter />
+      <CommentsTop />
+      <Complain />
     </>
   );
 };
 
-export default Main;
+export default UserComplain;

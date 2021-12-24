@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { Provider } from 'react-redux';
+import { LanguageProvider } from './Context/Language';
 import store from './redux/store';
 
 // shu yerga
@@ -14,7 +15,9 @@ import './index.css';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <LanguageProvider>
+        <App />
+      </LanguageProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

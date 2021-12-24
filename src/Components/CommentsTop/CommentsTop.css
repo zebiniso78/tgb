@@ -1,17 +1,19 @@
 .comments__navbar {
-  margin-top: 10px;
+  padding-top: 8px;
+  background-color: #fff;
+  width: 100%;
 }
 
 .logo__image-comment {
   display: block;
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .logo__info-comment {
   display: block;
-  font-size: 32px;
+  font-size: 28px;
   font-family: 'Roboto', sans-serif;
   color: #03483a;
   font-weight: bold;

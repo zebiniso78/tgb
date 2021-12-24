@@ -1,0 +1,32 @@
+#complain__wrapper {
+  border: none !important;
+}
+#complain__body-wrapper {
+  height: 70vh;
+  background-color: rgba(250, 250, 235, 0.4);
+  border: 2px solid rgb(250, 250, 235);
+}
+
+#complain__header-wrapper {
+  background-color: rgba(213, 235, 218, 0.4);
+  border: 2px solid rgb(16, 120, 98);
+  border-radius: 25px 25px 0 0;
+  /* border-bottom: 2px solid rgb(213, 235, 218, 0.4); */
+}
+
+#complain__text-username span {
+  color: rgb(16, 120, 98);
+}
+
+.complain__text,
+.complain__image,
+.complain__audio {
+  padding: 16px 12px;
+  border: 1px solid white;
+  border-radius: 8px;
+  background-color: rgba(213, 235, 218, 0.8);
+}
+
+.complain__image {
+  padding: 6px;
+}

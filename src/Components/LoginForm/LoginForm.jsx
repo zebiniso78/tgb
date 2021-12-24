@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './LoginForm.css';
 import axios from 'axios';
 
+import content from '../../Localization/Content';
+import { LanguageContext } from '../../Context/Language';
+
 import User from '../../Assets/Images/Login/user.png';
 import { useNavigate } from 'react-router-dom';
 
 function LoginTop() {
-  
+  const { language, setLanguage } = React.useContext(LanguageContext);
+
   const navigate = useNavigate();
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -51,36 +55,41 @@ function LoginTop() {
         <img className="user__img" src={User} alt="User" />
       </div>
       <div className="login__title-wrapper">
-        <h2 className="login__title">Log In</h2>
-        <select className="login__select-language">
-          <option value="en">English</option>
-          <option value="ru">Russian</option>
-          <option value="uz">Uzbek</option>
+        <h2 className="login__title">{content[language].login_title}</h2>
+        <select
+          className="login__select-language"
+          value={language}
+          onChange={(evt) => {
+            setLanguage(evt.target.value);
+          }}
+        >
+          <option value="ru">{content[language].lang_ru}</option>
+          <option value="uz">{content[language].lang_uz}</option>
         </select>
       </div>
       <div className="email-wrapper">
         <label htmlFor="username" className="username__label">
-          Enter your username here
+          {content[language].e_username}
         </label>
         <input
           className="username"
           type="username"
           name="username"
           id="username"
-          placeholder="Enter your username here"
+          placeholder={content[language].e_username}
           required
         />
       </div>
       <div className="password-wrapper">
         <label htmlFor="password" className="password__label">
-          Enter your password here
+          {content[language].e_password}
         </label>
         <input
           className="password"
           type={showPassword ? 'text' : 'password'}
           name="password"
           id="password"
-          placeholder="Enter your password here"
+          placeholder={content[language].e_password}
           required
         />
       </div>
@@ -92,10 +101,10 @@ function LoginTop() {
         onClick={tooglePassword}
       />
       <label htmlFor="show-password" className="show-password__label">
-        Show password
+        {content[language].show_password}
       </label>
 
-      <button className="login__button">Log In</button>
+      <button className="login__button">{content[language].login_title}</button>
     </form>
   );
 }
