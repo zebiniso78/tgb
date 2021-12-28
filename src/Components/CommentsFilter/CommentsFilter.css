@@ -238,6 +238,10 @@
   margin-bottom: 12px;
 }
 
+.complain__type span {
+  font-size: 14px;
+}
+
 .complain__list-related {
   margin: 0;
   padding: 0;

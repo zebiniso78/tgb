@@ -239,7 +239,7 @@ function CommentsFilter() {
                   key={comment.id}
                   onClick={handleUser}
                 >
-                  <div className="user__avatar-wrapper">
+                  <div className="user__avatar-wrapper me-2">
                     <img src={avatar} alt="" width={45} height={45} />
                   </div>
                   <div className="complain__item-wrapper">
