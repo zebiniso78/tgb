@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import content from '../../Localization/Content';
 import { LanguageContext } from '../../Context/Language';
 
-import Identicon from 'identicon.js';
-
+import Doc from '../../Assets/Images/Login/document.png';
+import avatar from '../../Assets/Images/Login/user.png';
 import './CommentsFilter.css';
+const avatar_color = {
+  success: '#00ff00',
+  warning: '#ffff00',
+  danger: '#ff0000',
+};
 
 function CommentsFilter() {
   const { language } = React.useContext(LanguageContext);
-
+  const type_text = {
+    success: content[language].t_success,
+    warning: content[language].t_warning,
+    danger: content[language].t_danger,
+  };
   const [datalist, setDatalist] = useState([]);
   const [filtrcat, setFiltrcat] = useState([]);
-
+  const [openModal, setOpenModal] = useState(false);
   const [complain, setComplain] = useState({
     complain: {
       category: '',
@@ -30,11 +39,14 @@ function CommentsFilter() {
     teacher_name: '',
   });
 
+  const [related, setRelated] = useState([]);
+
   // Form inputs
   const [fromdate, setFromdate] = useState('');
   const [todate, setTodate] = useState('');
   const [category, setCategory] = useState('');
   const [rtype, setRtype] = useState('');
+  const [activeli, setActiveli] = useState(0);
   // end form inputs
 
   const navigate = useNavigate();
@@ -55,21 +67,17 @@ function CommentsFilter() {
       },
     })
       .then(function (response) {
-        console.log(response);
         const data = response.data;
-        console.log(data);
         setDatalist(data);
       })
       .catch(function (error) {
-        console.log(error);
-        if (error.length > 0) {
+        if (error.response.status) {
           if (error.response.status === 401) {
             localStorage.removeItem('token');
             navigate('/');
           }
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -82,20 +90,17 @@ function CommentsFilter() {
       },
     })
       .then(function (response) {
-        console.log(response);
         const data = response.data;
-        console.log(data);
         setFiltrcat(data);
       })
       .catch(function (error) {
-        if (error.length > 0) {
+        if (error.response.status) {
           if (error.response.status === 401) {
             localStorage.removeItem('token');
             navigate('/');
           }
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleSubmit(event) {
@@ -126,6 +131,7 @@ function CommentsFilter() {
         console.log(response);
         const data = response.data;
         setDatalist(data);
+        setOpenModal(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -158,7 +164,7 @@ function CommentsFilter() {
     event.preventDefault();
     let userID = event.currentTarget.id;
     console.log(userID);
-
+    setActiveli(userID);
     axios({
       method: 'get',
       url: 'http://192.168.43.165:1122/api/complain/' + userID,
@@ -168,13 +174,33 @@ function CommentsFilter() {
       },
     })
       .then(function (response) {
-        //console.log(response);
         const data = response.data;
-        console.log(data);
+        const chatID = data.complain.chat_id;
         setComplain(data);
+
+        axios({
+          method: 'get',
+          url: 'http://192.168.43.165:1122/api/related/' + chatID,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'x-access-token': localStorage.getItem('token'),
+          },
+        })
+          .then(function (response) {
+            const allComplain = response.data;
+            setRelated(allComplain);
+          })
+          .catch(function (error) {
+            if (error.response.status) {
+              if (error.response.status === 401) {
+                localStorage.removeItem('token');
+                navigate('/');
+              }
+            }
+          });
       })
       .catch(function (error) {
-        if (error.length > 0) {
+        if (error.response.status) {
           if (error.response.status === 401) {
             localStorage.removeItem('token');
             navigate('/');
@@ -188,126 +214,53 @@ function CommentsFilter() {
   return (
     <>
       <div className="container-fluid">
-        {/* <div
-        className="col-3 border border-0 border-right m-0 p-0"
-        id="user__list"
-      >
-        <form className="form__wrapper" onSubmit={handleSubmit}>
-          <div className="row px-2 mb-2">
-            <label className="h6 color-dark m-0 p-0 mb-1" for="date">
-              {content[language].date_from}
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              value={fromdate}
-              onChange={handleDate}
-            />
-          </div>
+        <div className="row ovf complain-left col-3 my-1">
+          <button
+            type="button"
+            className="filter__button btn btn-success"
+            onClick={() => {
+              setOpenModal(true);
+            }}
+          >
+            {content[language].filter}
+          </button>
 
-          <div className="row px-2 mb-2">
-            <label className="h6 color-dark m-0 p-0 mb-1" for="date">
-              {content[language].date_to}
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              value={todate}
-              onChange={handleToDate}
-            />
-          </div>
-
-          <div className="row px-2 mb-2">
-            <label className="h6 color-dark m-0 p-0 mb-1" for="category">
-              {content[language].category}
-            </label>
-            <select
-              className="form-control"
-              name="category"
-              id="category"
-              onChange={handleCategory}
-              value={category}
-            >
-              <option value="all">{content[language].t_all}</option>
-
-              {filtrcat.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="row px-2 mb-2">
-            <label className="h6 color-dark m-0 p-0 mb-1" for="type">
-              {content[language].type}
-            </label>
-            <select
-              className="form-control px-2"
-              name="type"
-              id="type"
-              onChange={handleType}
-              value={rtype}
-            >
-              <option value="all">{content[language].t_all}</option>
-              <option value="success"> {content[language].t_success}</option>
-              <option value="warning">{content[language].t_warning}</option>
-              <option value="danger">{content[language].t_danger}</option>
-            </select>
-
-            <button className="btn-success mt-3 px-2 py-1" type="submit">
-              {content[language].btn_send}
-            </button>
-          </div>
-
-          {/* <h3 className="h4 px-1 my-3">Complain lists</h3> *
-        </form> */}
-
-        <div className="row ovf col-3 my-1">
           <ul className="complain__list">
-            {datalist.map((comment) => (
-              <li
-                id={comment.id}
-                className="complain__item bg-white d-flex align-center rounded py-2 mb-3"
-                key={comment.id}
-                onClick={handleUser}
-              >
-                <div className="user__avatar-wrapper">
-                  <img
-                    className="complain__avatar me-2"
-                    alt="Icon"
-                    width="30"
-                    height="30"
-                    src={`data:image/png;base64,${new Identicon(
-                      comment.avatar,
-                      30
-                    ).toString()}`}
-                  />
-                </div>
-                <div className="complain__item-wrapper">
-                  <div className="d-flex justify-content-between">
+            {datalist
+              .sort((a, b) => (a.id > b.id ? 1 : -1))
+              .map((comment) => (
+                <li
+                  id={comment.id}
+                  className={
+                    comment.id === activeli
+                      ? 'complain__item bg-white d-flex align-center rounded py-2 mb-3 active-li'
+                      : 'complain__item bg-white d-flex align-center rounded py-2 mb-3'
+                  }
+                  key={comment.id}
+                  onClick={handleUser}
+                >
+                  <div className="user__avatar-wrapper">
+                    <img src={avatar} alt="" width={45} height={45} />
+                  </div>
+                  <div className="complain__item-wrapper">
                     <a
                       href={'https://t.me/' + comment.username}
-                      className={`user-name__link text-${comment.type} text-decoration-none`}
+                      className={`user-name__link text-black text-decoration-none`}
                     >
                       {comment.first_name}
                     </a>
-                    <span className="h6 ms-4">
+                    <span className="complain__item-date">
                       {comment.date.split(' ', 1)}
                     </span>
                   </div>
-                  <p className="h6">
-                    {content[language].category}: {comment.category}
-                  </p>
-                </div>
-              </li>
-            ))}
+                </li>
+              ))}
           </ul>
         </div>
 
-        <div className="col-6 complain-center border border-1">
-          <div className="complain-center-top">
-            <div>
+        <div className="col-6 complain-center">
+          {complain.complain.first_name.length > 0 ? (
+            <div className="complain-center-top">
               <h3 className="user__complain-name">
                 {complain.complain.first_name}
               </h3>
@@ -318,21 +271,146 @@ function CommentsFilter() {
                 {complain.complain.username}
               </a>
             </div>
-            <div>
-              <p className={`complain-type color-${complain.complain.type}`}>
-                {complain.complain.type}
-              </p>
-              <span className="complain-date">{complain.complain.date}</span>
-            </div>
+          ) : (
+            ''
+          )}
+          <div className="complain-center-body">
+            {complain.complain.complain_date.map((row) =>
+              row.key === 'text' ? (
+                <div
+                  className="complain__text-wrapper d-flex m-0 my-3"
+                  key={row.id}
+                >
+                  <p className="complain__text h6">{row.value}</p>
+                </div>
+              ) : row.key === 'photo' ? (
+                <div
+                  className="complain__image-wrapper d-block my-3 "
+                  key={row.id}
+                >
+                  <img
+                    className="complain__image rounded float-left"
+                    src={`http://192.168.43.165:1122/${row.value}`}
+                    alt="Sent"
+                    width={200}
+                    height={200}
+                  />
+                </div>
+              ) : row.key === 'voice' ? (
+                <div
+                  className="complain__audio-wrapper my-3 rounded float-left"
+                  key={row.id}
+                >
+                  <audio
+                    controls
+                    className="complain__audio rounded float-left p-1"
+                  >
+                    <source
+                      src={`http://192.168.43.165:1122/${row.value}`}
+                      type="audio/mpeg"
+                    />
+                  </audio>
+                </div>
+              ) : row.key === 'document' ? (
+                <a
+                  className="complain__doc-link my-3 rounded float-left"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  key={row.id}
+                  href={`http://192.168.43.165:1122/${row.value}`}
+                  download
+                >
+                  <img
+                    className="complain__doc-image"
+                    src={Doc}
+                    alt="Document"
+                    width="40"
+                    height="40"
+                  />
+                  <p className="complain__doc-name">
+                    {row.value.split('/', 4).reverse().join().split(',', 1)}
+                  </p>
+                </a>
+              ) : (
+                ''
+              )
+            )}
           </div>
         </div>
-        {/* <div className="comments__wrapper card my-5">
-        <form onSubmit={handleSubmit}>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-sm-3">
-                <div className="form-group">
-                  <label for="date">{content[language].date_from}</label>
+
+        <div className="complain-right">
+          {complain.complain.first_name.length > 0 ? (
+            <div className="col-3 complain-right-top">
+              <div>
+                <h2 className="complain__name-right">
+                  {complain.complain.first_name}
+                </h2>
+              </div>
+              <p className="full-info">{content[language].full_info}</p>
+              <p className="complain__date">
+                {content[language].date}: {complain.complain.created_time}
+              </p>
+              <p className="complain__type">
+                {content[language].type}:{' '}
+                <span class={`badge bg-${complain.complain.type}`}>
+                  {' '}
+                  {type_text[complain.complain.type]}
+                </span>
+              </p>
+              <p className="complain__category">
+                {' '}
+                {content[language].category}: {complain.complain.category}{' '}
+              </p>
+            </div>
+          ) : (
+            ''
+          )}
+
+          <div className="complain-right-body">
+            <ul className="complain__list-related">
+              {related.map((rcomment) => (
+                <li
+                  id={rcomment.id}
+                  className="complain__item-related bg-white d-flex align-center rounded py-2 mb-3"
+                  key={rcomment.id}
+                  onClick={handleUser}
+                >
+                  <div className="complain__item-related-wrapper">
+                    <div className="d-flex justify-content-between">
+                      <a
+                        href={'https://t.me/' + rcomment.username}
+                        className={`user-name__link text-${rcomment.type} text-decoration-none`}
+                      >
+                        {rcomment.first_name}
+                      </a>
+                    </div>
+                    <p className="h6">
+                      {content[language].category}: {rcomment.category}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {openModal ? (
+        <div className="modalBackground">
+          <div className="modalContainer">
+            <div className="titleCloseBtn">
+              <button
+                className="btn-danger close__modal"
+                onClick={() => setOpenModal(false)}
+              >
+                X
+              </button>
+            </div>
+            <div className="body">
+              <form className="form__wrapper" onSubmit={handleSubmit}>
+                <div className="row px-2 mb-2">
+                  <label className="h6 color-dark m-0 p-0 mb-1" htmlFor="date">
+                    {content[language].date_from}
+                  </label>
                   <input
                     type="date"
                     className="form-control"
@@ -340,10 +418,11 @@ function CommentsFilter() {
                     onChange={handleDate}
                   />
                 </div>
-              </div>
-              <div className="col-sm-3">
-                <div className="form-group">
-                  <label for="t_date">{content[language].date_to}</label>
+
+                <div className="row px-2 mb-2">
+                  <label className="h6 color-dark m-0 p-0 mb-1" htmlFor="date">
+                    {content[language].date_to}
+                  </label>
                   <input
                     type="date"
                     className="form-control"
@@ -351,18 +430,23 @@ function CommentsFilter() {
                     onChange={handleToDate}
                   />
                 </div>
-              </div>
-              <div className="col-sm-3">
-                <div className="form-group">
-                  <label for="category">{content[language].category}</label>
+
+                <div className="row px-2 mb-2">
+                  <label
+                    className="h6 color-dark m-0 p-0 mb-1"
+                    htmlFor="category"
+                  >
+                    {content[language].category}
+                  </label>
                   <select
+                    className="form-control"
                     name="category"
                     id="category"
-                    className="form-control"
                     onChange={handleCategory}
                     value={category}
                   >
                     <option value="all">{content[language].t_all}</option>
+
                     {filtrcat.map((item) => (
                       <option value={item.id} key={item.id}>
                         {item.name}
@@ -370,19 +454,21 @@ function CommentsFilter() {
                     ))}
                   </select>
                 </div>
-              </div>
-              <div className="col-sm-3">
-                <div className="form-group">
-                  <label for="type">{content[language].type}</label>
+
+                <div className="row px-2 mb-2">
+                  <label className="h6 color-dark m-0 p-0 mb-1" htmlFor="type">
+                    {content[language].type}
+                  </label>
                   <select
+                    className="form-control px-2"
                     name="type"
                     id="type"
-                    className="form-control"
                     onChange={handleType}
                     value={rtype}
                   >
                     <option value="all">{content[language].t_all}</option>
                     <option value="success">
+                      {' '}
                       {content[language].t_success}
                     </option>
                     <option value="warning">
@@ -390,56 +476,29 @@ function CommentsFilter() {
                     </option>
                     <option value="danger">{content[language].t_danger}</option>
                   </select>
+                  <div className="btn__wrapper">
+                    <button
+                      className="send__button w-25 btn-success mt-3 px-2 py-1"
+                      type="submit"
+                      onClick={handleSubmit}
+                    >
+                      {content[language].btn_send}
+                    </button>
+                    <button
+                      className="close__button w-25 btn-danger mt-3 px-2 py-1"
+                      onClick={() => setOpenModal(false)}
+                    >
+                      {content[language].cancel}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
-          <div className="card-footer">
-            <button className="btn btn-success px-4 py-2 d-flex" type="submit">
-              {content[language].btn_send}
-            </button>
-          </div>
-        </form>
-      </div>
-      <div className="card mt-3">
-        <div className="card-body">
-          <div className="row">
-            {datalist.map((comment) => (
-              <div className="col-sm-3 my-2" key={comment.id}>
-                <div className="card">
-                  <div
-                    className={`card-header bg-${comment.type} own-warning own-success own-danger`}
-                  >
-                    <a
-                      href={'https://t.me/' + comment.username}
-                      className="user-name__link text-white text-decoration-none"
-                    >
-                      {comment.first_name}
-                    </a>
-                  </div>
-                  <div className="card-body">
-                    <p className="h6 text-left">
-                      {content[language].date}: {comment.date}
-                    </p>
-                    <p className="h6 text-left">
-                      {content[language].category}: {comment.category}
-                    </p>
-                    <Link to={`/complain/${comment.id}`}>
-                      <button
-                        className={` btn btn-${comment.type} mt-1`}
-                        type="submit"
-                      >
-                        {content[language].btn_more}
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
-      </div> */}
-      </div>
+      ) : (
+        ''
+      )}
     </>
   );
 }

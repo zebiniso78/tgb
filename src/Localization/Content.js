@@ -19,6 +19,9 @@ const content = {
     t_danger: 'Шикоят',
     btn_send: 'Юбориш',
     btn_more: 'Батафсил',
+    filter: 'Филтер',
+    full_info: 'Барча маълумот',
+    cancel: 'Бекор килиш',
   },
 
   ru: {
@@ -41,6 +44,9 @@ const content = {
     t_danger: 'Возражение',
     btn_send: 'Отправлять',
     btn_more: 'Читать далее',
+    filter: 'Филтер',
+    full_info: 'Все информация',
+    cancel: 'Отмена',
   },
 };
 

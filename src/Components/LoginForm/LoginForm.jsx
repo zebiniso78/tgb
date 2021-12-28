@@ -30,6 +30,7 @@ function LoginTop() {
     })
       .then(function (response) {
         const { data } = response;
+        console.log(data);
         localStorage.setItem('token', data.token);
         navigate('/main');
       })
@@ -93,6 +94,7 @@ function LoginTop() {
           required
         />
       </div>
+      <div className="show-password__wrapper">
       <input
         type="checkbox"
         className="show-password__input"
@@ -103,6 +105,7 @@ function LoginTop() {
       <label htmlFor="show-password" className="show-password__label">
         {content[language].show_password}
       </label>
+      </div>
 
       <button className="login__button">{content[language].login_title}</button>
     </form>

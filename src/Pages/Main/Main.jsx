@@ -13,7 +13,10 @@ const Main = () => {
   }, []);
   return (
     <>
+      <main>
+      <CommentsTop />
       <CommentsFilter />
+      </main>
     </>
   );
 };

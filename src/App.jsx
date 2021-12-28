@@ -4,8 +4,6 @@ import './App.css';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from './Pages/Main/Main';
 import Login from './Pages/LogIn/Login';
-import UserComplain from './Pages/UserComplain/UserComplain';
-
 
 function App() {
   return (
@@ -14,7 +12,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/main" element={<Main />} />
-          <Route path="/complain/:id" element={<UserComplain />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -1,0 +1,30 @@
+body {
+  background-color: rgb(16 120 98 / 12%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media only screen and (max-width: 1075px) {
+  .complain__item-wrapper {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .filter__button {
+    width: 84% !important;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .filter__button {
+    width: 84% !important;
+  }
+}
